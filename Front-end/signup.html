@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="signup.css">
+  <link rel="stylesheet" type="text/css" href="./signup.css">
 </head>
 <body>
   <div class="container">
@@ -14,30 +14,31 @@
     </header>
     <div class="row justify-content-center align-items-center vh-100">
       <div class="col-md-6">
-        <div class="card rounded-lg shadow-lg">
+        <div id="signup-container" class="card rounded-lg shadow-lg">
           <div class="card-body">
             <h2 class="card-title text-center mb-4">Sign Up</h2>
             <form id="signup-form">
               <div class="form-group">
-                <input type="text" class="form-control" id="name" placeholder="Name" required>
+                <input type="text" class="form-control" id="name" placeholder="Name" required autocomplete="name">
               </div>
               <div class="form-group">
-                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                <input type="email" class="form-control" id="email" placeholder="Email" required autocomplete="email">
               </div>
               <div class="form-group">
-                <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required>
+                <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required autocomplete="phone">
               </div>
               <div class="form-group">
-                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <input type="password" class="form-control" id="password" placeholder="Password" autocomplete="current-password" required>
               </div>
               <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
             </form>
+            <div id="response-message" class="message" style="display: none;"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+  <script type="module" src="./signup.js"></script>
 </body>
 </html>

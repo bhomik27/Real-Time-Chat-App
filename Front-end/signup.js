@@ -1,22 +1,41 @@
-document.getElementById("signup-form").addEventListener("submit", function (event) {
-    event.preventDefault(); 
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('signup-form');
 
-    // Fetch input values
-    var name = document.getElementById("name").value;
-    var email = document.getElementById("email").value;
-    var phone = document.getElementById("phone").value;
-    var password = document.getElementById("password").value;
+    form.addEventListener('submit', signup);
 
-    //validation here if needed
+    async function signup(event) {
+        event.preventDefault();
 
-    //Sending the data to the server
-    var userData = {
-        name: name,
-        email: email,
-        phone: phone,
-        password: password
-    };
+        try {
+            // Fetch input values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
 
-    //send userData to your backend for processing
-    console.log(userData);
+            // Construct signupData object
+            const signupData = { name, email, password, phone };
+
+            // Send signupData to the backend
+            await axios.post("http://localhost:3000/user/signup", signupData);
+
+            // Clear input fields after successful signup
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('phone').value = '';
+
+            // Display success alert
+            alert("User signup successful!");
+        } catch (error) {
+            // Handle errors
+            if (error.response && error.response.status === 409) {
+                // If the status code is 409 (User already exists), display error alert
+                alert("User already exists, Please Login");
+            } else {
+                // Log other errors to the console
+                console.error(error.response ? error.response.data : error.message);
+            }
+        }
+    }
 });

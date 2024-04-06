@@ -1,25 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const cors = require('cors'); // Import cors module
 const sequelize = require('./Backend/util/database');
 
-
 const userRoutes = require('./Backend/routes/user');
-
 const User = require('./Backend/models/user');
 
 const app = express();
 
-
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors()); // Enable CORS for all routes
 
+// Enable CORS for all routes
+app.use(cors({
+    origin: "http://localhost:3000", 
+    credentials: true
+}));
 
-//Routes
+// Routes
 app.use('/user', userRoutes);
-
 
 sequelize.sync()
     .then(() => {
@@ -28,4 +28,3 @@ sequelize.sync()
         });
     })
     .catch(err => console.log(err));
-    
