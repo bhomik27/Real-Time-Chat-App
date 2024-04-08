@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Import cors module
+const cors = require('cors'); 
 const sequelize = require('./Backend/util/database');
 
 const userRoutes = require('./Backend/routes/user');
@@ -13,10 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Enable CORS for all routes
-app.use(cors({
-    origin: "http://localhost:3000", 
-    credentials: true
-}));
+app.use(cors());
 
 // Routes
 app.use('/user', userRoutes);

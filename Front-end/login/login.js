@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('email').value = '';
             document.getElementById('password').value = '';
 
+            console.log(response);
+
             // Display success message
             alert("Login successful!");
         } catch (error) {
