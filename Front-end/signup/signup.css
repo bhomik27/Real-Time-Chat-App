@@ -1,42 +1,65 @@
 body {
-  background-color: #128C7E;
-  font-family: Arial, sans-serif; /* Use a common font family */
+  background-color: #111; /* Dark grey background color */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .logo {
   font-size: 2.5rem;
-  color: black;
+  color: #1478f2;
   font-weight: bold;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.card {
-  background-color: rgba(255, 255, 255, 0.9);
-  border: none;
-  padding: 20px; /* Add some padding */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.card-title { 
-  color: #075E54;
+#signup-container {
+  background-color: #333; /* Dark grey container background color */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+  position: relative;
+  margin-bottom: 20px;
+  max-width: 400px; /* Limit the maximum width */
+  width: calc(100% - 40px); /* Take full width with some margin */
+  text-align: center; 
 }
 
-.btn-primary {
-  background-color: #25D366;
-  border-color: #25D366;
+#signup-container input {
+  width: calc(100% - 40px); /* Take full width with some margin */
+  margin-bottom: 15px;
+  border-radius: 19px;
+  border: 2px solid #333;
+  padding: 16px 19px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: white; /* Dark grey input background color */
+  color: black; /* White input text color */
 }
 
-.btn-primary:hover {
-  background-color: #128C7E;
-  border-color: #128C7E;
+#signup-container h2 {
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.form-control {
-  border-radius: 25px;
-  padding: 15px; /* Apply padding to all form controls */
-}
-
-.btn {
+.btn-primary, .btn-secondary {
+  width: calc(100% - 40px); /* Take full width with some margin */
   border-radius: 25px;
   font-weight: bold;
+  padding: 10px;
+  font-size: large; /* Adjust button font size */
 }
 
 .message {
@@ -44,16 +67,16 @@ body {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 10px 20px; /* Adjust size as needed */
-  border-radius: 10px; /* Adjust border radius as needed */
+  padding: 10px 20px;
+  border-radius: 10px;
   color: #fff;
   font-weight: bold;
-  opacity: 0; /* Initially hide the message */
+  opacity: 0;
   transition: opacity 0.5s ease;
 }
 
 .message.show {
-  opacity: 1; /* Show the message */
+  opacity: 1;
 }
 
 .message.success {
@@ -62,4 +85,29 @@ body {
 
 .message.error {
   background-color: #dc3545;
+}
+
+.text-center {
+  text-align: center;
+}
+
+#signup-btn{
+  width: 70%;
+  margin-top: 10px;
+  background-color: #1478f2;
+  border-color: #1478f2;
+  color: white;
+  font-weight: bold;
+
+}
+
+#login-btn{
+  width: 30%;
+  margin-top: 10px;
+  background-color: #14f25e;
+  border-color:  #14f25e;
+  color: white;
+  font-weight: bold;
+  float: center;
+  
 }
