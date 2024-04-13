@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const sequelize = require('../util/database');
 
 
 const generateAccessToken = (id, name) => {
@@ -27,13 +26,14 @@ const signup = async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        await User.create({ name, email, phone, password: hashedPassword }, { transaction: t });
+        // Only create the user once
+        const newUser = await User.create({ name, email, phone, password: hashedPassword }, { transaction: t });
 
         await t.commit();
 
         return res.status(201).json({
             message: 'User signed up successfully!',
-            user: { name, email }
+            user: { name: newUser.name, email: newUser.email }
         });
     } catch (error) {
         console.error('Error during signup:', error);
@@ -56,6 +56,7 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
+        await User.update({isloggedin:true},{where:{id:user.id}})
 
         return res.status(200).json({
             message: 'Login successful!',
@@ -67,7 +68,20 @@ const login = async (req, res) => {
     }
 };
 
+const getAllLoggedinUsers = async (req, res) => {
+    try {
+        console.log(req.user)
+        const loggedinusers = await User.findAll({ where: { isloggedin: true } })
+        res.status(200).json({ loggedinusers })
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+
+
 module.exports = {
     signup,
-    login
+    login,
+    getAllLoggedinUsers
 };

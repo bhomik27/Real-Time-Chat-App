@@ -24,8 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log(response);
 
-            // Display success message
-            alert("Login successful!");
+            localStorage.setItem('token', response.data.token);
+            
+            // Redirect to home page
+            window.location.href = "../home/home.html";
+
+
         } catch (error) {
             // Handle errors
             if (error.response && error.response.status === 401) {
