@@ -20,14 +20,17 @@ const createMessage = async (req, res) => {
 
 const getAllChats = async (req, res) => {
     try {
-        const chats = await Chat.findAll({ attributes: ['id', 'message', 'createdAt', 'updatedAt'] });
+        const chats = await Chat.findAll({
+            attributes: ['id', 'message', 'createdAt', 'updatedAt'],
+            order: [['createdAt', 'DESC']], // Order chats by creation date descending
+            limit: 10 // Limit the number of fetched chats to 10
+        });
         res.status(200).json({ chats });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Internal server error." });
     }
 };
-
 
 module.exports = {
     createMessage,

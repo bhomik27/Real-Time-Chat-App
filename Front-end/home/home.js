@@ -37,11 +37,32 @@ document.addEventListener('DOMContentLoaded', async function () {
                     messageDiv.innerText = chat.message;
                     chatMessages.appendChild(messageDiv);
                 });
+
+                // Store messages in local storage
+                const messagesToStore = response.data.chats.map(chat => chat.message);
+                localStorage.setItem('messages', JSON.stringify(messagesToStore));
             }
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
     }
+
+    // Function to retrieve messages from local storage
+    function retrieveMessagesFromLocalStorage() {
+        const storedMessages = localStorage.getItem('messages');
+        if (storedMessages) {
+            const messages = JSON.parse(storedMessages);
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.innerText = message;
+                chatMessages.appendChild(messageDiv);
+            });
+        }
+    }
+
+    // Call retrieveMessagesFromLocalStorage initially when the page loads
+    retrieveMessagesFromLocalStorage();
 
     // Call fetchAndDisplayMessages initially when the page loads
     await fetchAndDisplayMessages();
