@@ -43,8 +43,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    // Call fetchAndDisplayMessages when the page loads
+    // Call fetchAndDisplayMessages initially when the page loads
     await fetchAndDisplayMessages();
+
+    // Set interval to fetch messages every second
+    setInterval(fetchAndDisplayMessages, 1000);
 
     // Add event listener for navbar toggle
     navbarToggle.addEventListener('click', function () {
