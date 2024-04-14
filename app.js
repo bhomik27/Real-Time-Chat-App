@@ -35,6 +35,7 @@ app.use(cors());
 app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
 
+
 sequelize.sync()
     .then(() => {
         app.listen(3000, () => {
