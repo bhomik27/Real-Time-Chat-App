@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/users');
 
 const authenticate = async (req, res, next) => {
     try {
@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
         }
 
         const user = jwt.verify(token, process.env.JWT_SECRET);
-        // console.log("USERID <<<<<<<<", user.userId); 
+        console.log("USERID <<<<<<<<", user.userId); 
 
         const foundUser = await User.findByPk(user.userId);
 
@@ -22,12 +22,16 @@ const authenticate = async (req, res, next) => {
         next();
     } catch (err) {
         console.error(err);
-        return res.status(401).json({ success: false, message: 'Invalid token' });
+        if (err instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({ success: false, message: 'Token expired' });
+        } else if (err instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ success: false, message: 'Invalid token' });
+        } else {
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
     }
 };
 
 module.exports = {
     authenticate
 };
-
-

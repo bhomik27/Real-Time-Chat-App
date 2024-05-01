@@ -5,8 +5,11 @@ const router = express.Router();
 const Userauthentication = require('../middleware/auth');
 const chatController=require('../controllers/chat')
 
-router.post('/createmessage', Userauthentication.authenticate, chatController.createMessage);
+router.post('/createmessage/:groupId/:userId', Userauthentication.authenticate, chatController.createMessage);
 
 router.get('/getallchats', chatController.getAllChats);
+
+router.get('/getallchatsofgroup/:groupId', chatController.getAllChatsOfGroup);
+
 
 module.exports = router;

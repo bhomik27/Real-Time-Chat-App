@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(response);
 
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userId', response.data.userId);
+            
             
             // Redirect to home page
             window.location.href = "../home/home.html";

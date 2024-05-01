@@ -1,5 +1,7 @@
+/* Reset and general styles */
 body {
-    background-color: #111; /* Dark background color */
+    background-color: #000000;
+    /* Dark background color */
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -7,18 +9,36 @@ body {
 
 .logo {
     font-size: 2rem;
-    color: #fff; /* White logo color */
+    color: #dc5a22;
+    /* White logo color */
     font-weight: bold;
+    position: fixed;
+    /* Fixed position */
+    top: 20px;
+    /* Adjust top position */
+    left: 20px;
+    /* Adjust left position */
+    display: block;
+    /* Make it visible */
+    background-attachment: fixed;
+    /* Fix the background image to the screen */
 }
 
 .vertical-navbar {
     position: fixed;
-    top: 0;
     left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #333; /* Dark grey navbar background color */
+    width: 20px;
+    /* Initial width of the navbar */
+    height: auto;
+    background-color: #333;
+    /* Dark grey navbar background color */
     padding: 20px;
+    transition: width 0.3s ease;
+    /* Add transition effect */
+    border-radius: 28px;
+    margin: 80px 30px 200px;
+    z-index: 1;
+    flex: 1;
 }
 
 .vertical-navbar .navbar-nav {
@@ -27,111 +47,46 @@ body {
 }
 
 .vertical-navbar .nav-item {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .vertical-navbar .nav-link {
-    color: #fff; /* White text color for navbar links */
+    color: #ffffff;
+    /* White text color for navbar links */
     text-decoration: none;
     font-weight: bold;
-    display: block;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
 }
 
 .vertical-navbar .nav-link:hover {
-    background-color: #555; /* Darker grey on hover */
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    color: #1478f2;
+    /* Change the color to your desired hover color */
+    transform: scale(1.4);
 }
 
+/* Header styles */
 .header {
     position: fixed;
     top: 0;
     right: 0;
-    background-color: #333; /* Dark grey navbar background color */
+    background-color: #111;
+    /* Dark grey navbar background color */
     padding: 20px;
 }
 
-.horizontal-navbar .navbar-nav {
-    list-style: none;
-    padding: 0;
-}
-
-.horizontal-navbar .nav-item {
-    display: inline-block;
-    margin-left: 10px;
-}
-
-.horizontal-navbar .nav-link {
-    color: #fff; /* White text color for navbar links */
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.horizontal-navbar .nav-link:hover {
-    background-color: #555; /* Darker grey on hover */
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-
-.navbar-toggle {
-    position: absolute;
-    left: -40px; /* Initially hidden off-screen */
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #333; /* Dark grey background color for the toggle icon */
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 0 5px 5px 0;
-    transition: left 0.3s ease; /* Transition for slide-in effect */
-}
-
-.navbar-toggle i {
-    color: #fff; /* White color for the icon */
-    font-size: 24px;
-}
-
-.vertical-navbar {
-    /* Your existing styles */
-    transition: transform 0.3s ease; /* Add transition effect */
-    transform: translateX(-100%); /* Initially hide the navbar off-screen */
-}
-
-.vertical-navbar.show-navbar {
-    transform: translateX(0); /* Show the navbar by translating it back to its original position */
-}
-.navbar-toggle {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 0 5px 5px 0;
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.navbar-toggle i {
-    color: #111; /* Black color for the arrow icon */
-    font-size: 24px;
-}
-
-.navbar-toggle:hover {
-    background-color: #fff; /* White background on hover */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
-
-}
+/* Chat input styles */
 .message-input {
     position: fixed;
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%; /* Make it twice the width */
+    right: 20px;
+    width: calc(100% - 190px);
+    /* Make it occupy remaining space */
     display: flex;
     align-items: center;
     background-color: #fff;
-    border-radius: 30px;
+    border-radius: 7px;
     padding: 10px;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -140,11 +95,20 @@ body {
     flex: 1;
     border: none;
     outline: none;
-    
+    font-size: 16px;
+}
+
+#sendMessageButton {
+    background-color: #1478f2;
+    /* Adjust button color as needed */
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 15px;
 }
 
 .send-button {
-    background-color: #1478f2; /* Adjust button color as needed */
+    background-color: #1478f2;
+    /* Adjust button color as needed */
     color: #fff;
     cursor: pointer;
     padding: 10px 15px;
@@ -152,27 +116,163 @@ body {
     margin-left: 10px;
 }
 
-/* Add this CSS to your existing home.css file */
-.chat-container {
-    width: 80%; /* Adjust the width as needed */
-    margin-top: 40px; 
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 90px;
-    padding: 20px;
-    background-color: #6b6b6b; /* Background color for the chat container */
+
+
+.group-container {
+    position: relative;
+    width: calc(25% - 40px);
+    margin-top: 80px;
+    margin-left: 130px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+    padding: 6px;
+    background-color: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
-    overflow-y: auto; /* Enable vertical scrolling if needed */
-    height: 700px; /* Set a fixed height for the chat container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    height: 800px;
+    z-index: 1;
+    background-color:#b6c0bf;
 }
+
+/* Style for the group heading */
+.group-container h2 {
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 7px;
+    position: relative;
+    top: 0;
+    /* Adjusted top position */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 6px;
+    padding: 5px;
+    background-color: rgb(45, 45, 45);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    width: 85%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Style for each group */
+.group {
+    padding: 2px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 9px;
+    /* Adjusted padding */
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    color: #1f1f1f;
+    font-size: 16px;
+    text-decoration: none;
+    margin: 10px 10px 10px 10px;
+}
+
+.group:hover {
+    background-color: #e67070;
+}
+
+.group-name {
+    font-weight: bold;
+    text-align: center;
+    color: #000000;
+    padding: 5px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0px 0px 0px 0px;
+}
+
+
+
+
+.user-container {
+    width: calc(60% -980px);
+    /* Adjust the width as needed */
+    margin: 80px 10px 30px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    height: 790px;
+    width: 30%;
+    position: relative;
+    z-index: 1;
+    background-color:#b6c0bf;
+}
+
+.user-container h2 {
+    font-size: 20px;
+    color: #ffffff;
+    margin-bottom: 7px;
+    position: relative;
+    top: 0;
+    /* Adjusted top position */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 6px;
+    padding: 5px;
+    background-color: rgb(43, 43, 43);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    width: 85%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Styling for the green dot */
+.online-dot {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    /* Adjusted right position for the dot */
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #2ecc71;
+    /* Green color */
+}
+
+/* Styling for Online Users' names */
+.online-user {
+    padding: 10px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
+    font-size: 19px;
+    color: #1f1f1f;
+    position: relative;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-weight: bold;;
+    z-index: 1;
+    width: 90%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+/* Hover effect for Online Users' names */
+.online-user:hover {
+    background-color: rgb(203, 228, 102);
+    cursor: pointer;
+    
+}
+
+
 
 .chat-messages {
     margin-bottom: 20px;
 }
 
 .message {
-    background-color: #f2f2f2; /* Background color for chat messages */
+    background-color: #f2f2f2;
+    /* Background color for chat messages */
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -185,17 +285,19 @@ body {
 }
 
 .message-input input[type="text"] {
-    width: 70%; /* Adjust input width as needed */
+    width: 70%;
+    /* Adjust input width as needed */
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc; /* Add a border */
+    border: none;
 }
 
 .send-button {
     font-size: 16px;
     padding: 10px 20px;
     border-radius: 5px;
-    background-color: #25D366; /* Primary button color */
+    background-color: #25D366;
+    /* Primary button color */
     border: none;
     color: #fff;
     cursor: pointer;
@@ -203,5 +305,19 @@ body {
 }
 
 .send-button:hover {
-    background-color: #128C7E; /* Darker color on hover */
+    background-color: #128C7E;
+    /* Darker color on hover */
+}
+
+/* Container and box styles */
+.container {
+    display: flex;
+    height: 100vh;
+    /* Make the container take up the full height of the viewport */
+}
+
+.box {
+    overflow-y: auto;
+    /* Enable vertical scrolling if content exceeds box height */
+    border-radius: 10px;
 }

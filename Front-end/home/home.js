@@ -1,117 +1,120 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    const navbarToggle = document.getElementById('navbarToggle');
-    const verticalNavbar = document.querySelector('.vertical-navbar');
-    const sendButton = document.querySelector('.send-button');
-    const messageInput = document.querySelector('.message-input input');
-    const chatMessages = document.getElementById('chatMessages');
+    const groupContainer = document.querySelector('.group-container');
+    const userContainer = document.querySelector('.user-container');
 
-    // Function to fetch and display messages
-    async function fetchAndDisplayMessages() {
+    // Function to fetch and display groups
+    async function fetchAndDisplayGroups() {
+        groupContainer.innerHTML = '<h2>Groups</h2>';
+
         try {
-            // Retrieve the authentication token from local storage
             const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:3000/group/getallgroups', { headers: { "Authorization": token } });
 
-            if (!token) {
-                console.error('Authentication token is missing.');
-                return;
-            }
+            // Display fetched groups
+            response.data.groupNames.forEach(groupName => {
+                // Create a div for each group
+                const groupDiv = document.createElement('div');
+                groupDiv.classList.add('group');
 
-            // Include the token in the request headers
-            const config = {
-                headers: {
-                    Authorization: `${token}`
-                }
-            };
+                // Create a heading for group name
+                const groupNameHeading = document.createElement('h3');
+                groupNameHeading.textContent = groupName;
+                groupNameHeading.classList.add('group-name');
+                groupDiv.appendChild(groupNameHeading);
 
-            // Send request to fetch messages
-            const response = await axios.get('http://localhost:3000/chat/getallchats', config);
-
-            // Clear previous messages
-            chatMessages.innerHTML = '';
-
-            // Display fetched messages
-            if (response.data.chats) {
-                response.data.chats.forEach(chat => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.classList.add('message');
-                    messageDiv.innerText = chat.message;
-                    chatMessages.appendChild(messageDiv);
+                // Add click event listener to each group div
+                groupDiv.addEventListener('click', async function (event) {
+                    event.preventDefault(); // Prevent default anchor behavior
                 });
 
-                // Store messages in local storage
-                const messagesToStore = response.data.chats.map(chat => chat.message);
-                localStorage.setItem('messages', JSON.stringify(messagesToStore));
+                groupContainer.appendChild(groupDiv);
+            });
+        } catch (error) {
+            console.error('Error fetching groups:', error);
+        }
+    }
+
+    // Function to fetch and display online users
+    async function fetchAndDisplayOnlineUsers() {
+        userContainer.innerHTML = '<h2>Online Users</h2>'; // Display group name
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:3000/user/getAllLoggedinUsers', { headers: { "Authorization": token } });
+
+            if (response.data && Array.isArray(response.data.loggedinusers)) {
+                const onlineUsers = response.data.loggedinusers;
+                if (onlineUsers.length > 0) {
+                    // Create a parent container for online users
+                    const onlineUsersContainer = document.createElement('div');
+                    onlineUsersContainer.classList.add('online-users');
+
+                    onlineUsers.forEach(user => {
+                        // Create a div for each online user
+                        const userDiv = document.createElement('div');
+                        userDiv.classList.add('online-user');
+
+                        // Add user name
+                        userDiv.textContent = user.name; // Assuming 'name' is the property for user's name
+
+                        // Append a green dot for online users
+                        const dot = document.createElement('span');
+                        dot.classList.add('online-dot');
+                        userDiv.appendChild(dot);
+
+                        // Append the user div to the online users container
+                        onlineUsersContainer.appendChild(userDiv);
+                    });
+
+                    // Append the online users container to the chat container
+                    userContainer.appendChild(onlineUsersContainer);
+                } else {
+                    console.log('No online users found.');
+                }
+            } else {
+                console.error('Invalid response format: ', response.data);
             }
         } catch (error) {
-            console.error('Error fetching messages:', error);
+            console.error('Error fetching online users:', error);
         }
     }
 
-    // Function to retrieve messages from local storage
-    function retrieveMessagesFromLocalStorage() {
-        const storedMessages = localStorage.getItem('messages');
-        if (storedMessages) {
-            const messages = JSON.parse(storedMessages);
-            messages.forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message');
-                messageDiv.innerText = message;
-                chatMessages.appendChild(messageDiv);
-            });
-        }
-    }
-
-    // Call retrieveMessagesFromLocalStorage initially when the page loads
-    retrieveMessagesFromLocalStorage();
-
-    // Call fetchAndDisplayMessages initially when the page loads
-    await fetchAndDisplayMessages();
-
-    // Set interval to fetch messages every second
-    setInterval(fetchAndDisplayMessages, 1000);
-
-    // Add event listener for navbar toggle
-    navbarToggle.addEventListener('click', function () {
-        verticalNavbar.classList.toggle('show-navbar');
-    });
-
-    // Add event listener for send button
-    sendButton.addEventListener('click', async function (event) {
-        event.preventDefault(); // Prevent default form submission behavior
-
-        const message = messageInput.value.trim(); // Trim whitespace from message input
-
-        // Retrieve the authentication token from local storage
+// Logout Functionality
+document.getElementById('logoutButton').addEventListener('click', async () => {
+    try {
+        // Assuming you have the user ID and token stored in localStorage
+        const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('token');
 
-        if (!token) {
-            console.error('Authentication token is missing.');
-            return;
-        }
-
-        if (message !== '') {
-            try {
-                // Include the token in the request headers
-                const config = {
-                    headers: {
-                        Authorization: `${token}`
-                    }
-                };
-
-                // Send the request with the authentication token included in the headers
-                await axios.post('http://localhost:3000/chat/createmessage', { message }, config);
-
-                console.log('Message sent successfully');
-
-                // After sending the message, fetch and display updated messages
-                await fetchAndDisplayMessages();
-            } catch (error) {
-                // Handle errors
-                console.error('Error sending message:', error);
+        // Ensure that headers are correctly formatted
+        const config = {
+            headers: {
+                "Authorization": token
             }
-        }
+        };
 
-        // Clear the input field after sending the message
-        messageInput.value = '';
-    });
+        const response = await axios.post('http://localhost:3000/user/logout', { userId }, config);
+
+        if (response.status === 200) {
+            // Clear localStorage
+            localStorage.clear();
+            // Redirect to login page or any other appropriate page after successful logout
+            window.location.href = '../login/login.html';
+        } else {
+            console.error('Logout failed:', response.data.message);
+            // Handle logout failure
+        }
+    } catch (error) {
+        console.error('Error during logout:', error.message);
+        // Handle error, show error message to user, etc.
+    }
+});
+
+
+
+    // Fetch and Display Online Users
+    await fetchAndDisplayOnlineUsers();
+
+    // Fetch and Display Groups
+    await fetchAndDisplayGroups();
 });

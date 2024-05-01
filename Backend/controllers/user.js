@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/users');
+const sequelize = require('../util/database'); // Adjust the path if necessary
+
 
 
 const generateAccessToken = (id, name) => {
@@ -60,7 +62,8 @@ const login = async (req, res) => {
 
         return res.status(200).json({
             message: 'Login successful!',
-            token: generateAccessToken(user.id, user.name)
+            token: generateAccessToken(user.id, user.name),
+            userId: user.id,
         });
     } catch (error) {
         console.error('Error during login:', error);
@@ -78,10 +81,39 @@ const getAllLoggedinUsers = async (req, res) => {
     }
 };
 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.findAll({})
+        res.status(200).json({ users })
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+
+const logout = async (req, res) => {
+    try {
+        // Get the user ID from the request
+        const userId = req.user.id;
+
+        // Update the isloggedin status to false for the logged-out user
+        await User.update({ isloggedin: false }, { where: { id: userId } });
+
+        // Respond with success message
+        return res.json({ message: 'Logout successful' });
+    } catch (error) {
+        console.error('Error during logout:', error);
+        return res.status(500).json({ message: 'Error during logout process. Please try again later.' });
+    }
+};
+
+
 
 
 module.exports = {
     signup,
     login,
-    getAllLoggedinUsers
+    getAllLoggedinUsers,
+    getAllUsers,
+    logout,
 };
