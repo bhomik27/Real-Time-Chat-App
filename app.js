@@ -11,13 +11,13 @@ const groupRoutes = require('./Backend/routes/group');
 const User = require('./Backend/models/users');
 const Chat = require('./Backend/models/chats');
 const Group = require('./Backend/models/groups');
-const usergroups = require('./Backend/models/usergroups');
+const userGroups = require('./Backend/models/usergroups');
 
 
 const app = express();
 
 // Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json());     
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Enable CORS for all routes
@@ -36,8 +36,8 @@ Chat.belongsTo(User);
 Group.hasMany(Chat);
 Chat.belongsTo(Group);
 
-Group.belongsToMany(User, { through: usergroups });
-User.belongsToMany(Group, { through: usergroups });
+Group.belongsToMany(User, { through: userGroups });
+User.belongsToMany(Group, { through: userGroups });
 
 
 

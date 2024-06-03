@@ -1,0 +1,91 @@
+/* Basic CSS styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light background for better contrast */
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff; /* White background for container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333; /* Darker color for the heading */
+}
+.group-details {
+    margin-bottom: 20px;
+}
+.group-details p {
+    margin: 10px 0;
+    color: #555; /* Slightly darker text for better readability */
+}
+.member-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px; /* Limit height for member list */
+    overflow-y: auto; /* Scroll if there are many members */
+    border: 1px solid #ccc; /* Border around member list */
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Light background for member list */
+    padding: 10px; /* Padding inside the member list */
+}
+.member-list li {
+    margin-bottom: 5px;
+    padding: 5px;
+    border-bottom: 1px solid #eee; /* Subtle divider between members */
+}
+.member-list li:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+}
+.input-group {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px; /* Space between input groups */
+}
+.input-group input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px; /* Rounded left corners */
+}
+.input-group button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 0 5px 5px 0; /* Rounded right corners */
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+.input-group button:hover {
+    background-color: #0056b3;
+}
+.card {
+    margin-bottom: 20px;
+}
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px 5px 0 0; /* Rounded top corners */
+}
+.card-body {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+    background-color: #fff; /* White background for card body */
+}

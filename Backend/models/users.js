@@ -11,7 +11,7 @@ const User = sequelize.define('User', {
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: false, 
     unique: true
   },
   phone: {

@@ -1,62 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Group Management</title>
-        <script src="group.js"></script>
-        <!-- Corrected path to JavaScript file -->
-        <link rel="stylesheet" href="group.css">
-        <!-- Corrected path to CSS file -->
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    </head>
-    <body>
-        <div class="logo">
-            <header>Chat-X</header>
-        </div>
-        <nav class="vertical-navbar">
-            <ul class="navbar-nav">
-                <!-- Fixed href attribute for the link -->
-                <li class="nav-item"><a href="../home/home.html"
-                        class="nav-link"><i
-                            class="fa-solid fa-house"></i></a></li>
-                <li class="nav-item"><a href="group.html" class="nav-link"><i
-                            class="fas fa-users"></i></a></li>
-                <!-- Fixed href attribute for the link -->
-                <li class="nav-item"><a href="../chat/chat.html"
-                        class="nav-link"><i
-                            class="fas fa-comment"></i></a></li>
-                <!-- <li class="nav-item"><a href="#" class="nav-link"><i
-                            class="fas fa-bell"></i></a></li> -->
-                <li class="nav-item"><a href="#" class="nav-link"><i
-                            class="fas fa-cog"></i></a></li>
-                <li class="nav-item"><a href="#" class="nav-link"><i
-                            class="fas fa-user"></i></a></li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" id="logoutButton"><i
-                            class="fas fa-sign-out-alt"></i></a>
-                </li>
-            </ul>
-        </nav>
-
-        <div id="form-container">
-            <form id="my-form">
-                <label for="group-name"><b>Create Your Group</b></label><br>
-                <input type="text" id="group-name" name="group-name"><br>
-                <p>Select users to add to your group:</p>
-                <div id="user-list"></div>
-                <button class="btn" type="submit"><i class="fas fa-plus"></i>
-                    Create group</button><br>
-            </form>
-        </div>
-
-        <div class="box group-container"></div>
-
-        <div class="box user-container"></div>
-
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Management</title>
+    <link rel="stylesheet" href="group.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script defer src="group.js"></script>
+</head>
+<body>
+    <div class="logo">
+        <header>Chat-X</header>
+    </div>
+    <nav class="vertical-navbar">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="../home/home.html" class="nav-link"><i class="fa-solid fa-house"></i></a></li>
+            <li class="nav-item"><a href="group.html" class="nav-link"><i class="fas fa-users"></i></a></li>
+            <li class="nav-item"><a href="../chat/chat.html" class="nav-link"><i class="fas fa-comment"></i></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-user"></i></a></li>
+            <li class="nav-item"><a href="#" class="nav-link" id="logoutButton"><i class="fas fa-sign-out-alt"></i></a></li>
+        </ul>
+    </nav>
+    <div id="form-container">
+        <form id="my-form">
+            <label for="group-name"><b>Create Your Group</b></label><br>
+            <input type="text" id="group-name" name="group-name"><br>
+            <label for="group-description">Group's Description:</label>
+            <input type="text" id="group-description" name="group-description"><br>
+            <label for="searchInput">Select users to add to your group:</label>
+            <input type="text" id="searchInput" placeholder="Search users">
+            <div id="user-list"></div>
+            <button class="btn" type="submit"><i class="fas fa-plus"></i> Create group</button><br>
+        </form>
+    </div>
+    <div class="box group-container"></div>
+    <div class="box user-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+</body>
 </html>

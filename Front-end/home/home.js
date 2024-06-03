@@ -5,34 +5,39 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Function to fetch and display groups
     async function fetchAndDisplayGroups() {
         groupContainer.innerHTML = '<h2>Groups</h2>';
-
+    
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('http://localhost:3000/group/getallgroups', { headers: { "Authorization": token } });
-
-            // Display fetched groups
-            response.data.groupNames.forEach(groupName => {
-                // Create a div for each group
-                const groupDiv = document.createElement('div');
-                groupDiv.classList.add('group');
-
-                // Create a heading for group name
-                const groupNameHeading = document.createElement('h3');
-                groupNameHeading.textContent = groupName;
-                groupNameHeading.classList.add('group-name');
-                groupDiv.appendChild(groupNameHeading);
-
-                // Add click event listener to each group div
-                groupDiv.addEventListener('click', async function (event) {
-                    event.preventDefault(); // Prevent default anchor behavior
+    
+            // Ensure response.data.groups exists and is an array
+            if (response.data && Array.isArray(response.data.groups)) {
+                response.data.groups.forEach(group => {
+                    // Create a div for each group
+                    const groupDiv = document.createElement('div');
+                    groupDiv.classList.add('group');
+    
+                    // Create a heading for group name
+                    const groupNameHeading = document.createElement('h3');
+                    groupNameHeading.textContent = group.name;
+                    groupNameHeading.classList.add('group-name');
+                    groupDiv.appendChild(groupNameHeading);
+    
+                    // Add click event listener to each group div
+                    groupDiv.addEventListener('click', async function (event) {
+                        event.preventDefault(); // Prevent default anchor behavior
+                    });
+    
+                    groupContainer.appendChild(groupDiv);
                 });
-
-                groupContainer.appendChild(groupDiv);
-            });
+            } else {
+                console.error('Invalid response format or no groups found:', response.data);
+            }
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
     }
+    
 
     // Function to fetch and display online users
     async function fetchAndDisplayOnlineUsers() {
@@ -79,38 +84,36 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-// Logout Functionality
-document.getElementById('logoutButton').addEventListener('click', async () => {
-    try {
-        // Assuming you have the user ID and token stored in localStorage
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('token');
+    // Logout Functionality
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+        try {
+            // Assuming you have the user ID and token stored in localStorage
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
 
-        // Ensure that headers are correctly formatted
-        const config = {
-            headers: {
-                "Authorization": token
+            // Ensure that headers are correctly formatted
+            const config = {
+                headers: {
+                    "Authorization": token
+                }
+            };
+
+            const response = await axios.post('http://localhost:3000/user/logout', { userId }, config);
+
+            if (response.status === 200) {
+                // Clear localStorage
+                localStorage.clear();
+                // Redirect to login page or any other appropriate page after successful logout
+                window.location.href = '../login/login.html';
+            } else {
+                console.error('Logout failed:', response.data.message);
+                // Handle logout failure
             }
-        };
-
-        const response = await axios.post('http://localhost:3000/user/logout', { userId }, config);
-
-        if (response.status === 200) {
-            // Clear localStorage
-            localStorage.clear();
-            // Redirect to login page or any other appropriate page after successful logout
-            window.location.href = '../login/login.html';
-        } else {
-            console.error('Logout failed:', response.data.message);
-            // Handle logout failure
+        } catch (error) {
+            console.error('Error during logout:', error.message);
+            // Handle error, show error message to user, etc.
         }
-    } catch (error) {
-        console.error('Error during logout:', error.message);
-        // Handle error, show error message to user, etc.
-    }
-});
-
-
+    });
 
     // Fetch and Display Online Users
     await fetchAndDisplayOnlineUsers();

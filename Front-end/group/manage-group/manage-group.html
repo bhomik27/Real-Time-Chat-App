@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Group</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="manage-group.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Manage Group</h1>
+        
+        <div class="card">
+            <div class="card-header">
+                Group Details
+            </div>
+            <div class="card-body">
+                <p>Group Name: <span id="group-name"></span></p>
+                <p>Description: <span id="group-description"></span></p>
+                <p>Created By: <span id="created-by"></span></p>
+                <p>Created At: <span id="created-at"></span></p>
+                
+                <p>Members:</p>
+                <ul class="member-list" id="member-list">
+                    <!-- Members will be dynamically populated here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                Add Members
+            </div>
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="search-box" placeholder="Search members...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="searchMembers()">Search</button>
+                    </div>
+                </div>
+                <div class="input-group mb-3" id="search-results">
+                    <!-- Search results will be dynamically populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Custom JS -->
+    <script src="manage-group.js"></script>
+</body>
+</html>
