@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const signupData = { name, email, password, phone };
 
             // Send signupData to the backend
-            await axios.post("http://localhost:3000/user/signup", signupData);
+            await axios.post("http://13.233.193.120//user/signup", signupData);
 
             // Clear input fields after successful signup
             document.getElementById('name').value = '';

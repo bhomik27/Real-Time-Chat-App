@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors'); 
+const path = require('path'); 
+
+require('dotenv').config(); 
+
 const sequelize = require('./Backend/util/database');
 
 const userRoutes = require('./Backend/routes/user');
@@ -29,6 +33,14 @@ app.use('/chat', chatRoutes);
 app.use('/group', groupRoutes);
 
 
+
+app.use((req, res) => {
+    console.log('URL', req.url);
+
+    res.sendFile(path.join(__dirname, `./Front-end/${req.url}`));
+})
+
+
 // Define relationships between tables
 User.hasMany(Chat);
 Chat.belongsTo(User);
@@ -42,7 +54,7 @@ User.belongsToMany(Group, { through: userGroups });
 
 
 // Sync Sequelize with the database
-sequelize.sync()
+sequelize.sync({force: true})
     .then(() => {
         app.listen(3000, () => {
             console.log('Server is running on port 3000');
