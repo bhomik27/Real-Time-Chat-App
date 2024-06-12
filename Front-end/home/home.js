@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('http://13.233.193.120:3000/group/getallgroups', { headers: { "Authorization": token } });
-    
+            
             // Ensure response.data.groups exists and is an array
             if (response.data && Array.isArray(response.data.groups)) {
                 response.data.groups.forEach(group => {

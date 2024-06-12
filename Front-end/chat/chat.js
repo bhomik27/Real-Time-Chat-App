@@ -12,7 +12,17 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('http://13.233.193.120:3000/group/getallgroups', { headers: { "Authorization": token } });
-            displayGroups(response.data.groupNames, response.data.groupIds);
+            console.log(response);
+
+            // Ensure response structure matches the expectation
+            if (response.data && response.data.groups) {
+                const groups = response.data.groups;
+                const groupNames = groups.map(group => group.name);
+                const groupIds = groups.map(group => ({ groupId: group.id }));
+                displayGroups(groupNames, groupIds);
+            } else {
+                throw new Error("Invalid response structure");
+            }
         } catch (error) {
             handleFetchError('groups', error);
         }
@@ -81,27 +91,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-// Create a message container
-function createMessageContainer(chat) {
-    const messageContainer = document.createElement('div');
-    messageContainer.classList.add('message-container');
+    // Create a message container
+    function createMessageContainer(chat) {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
 
-    // Default sender name if chat.User doesn't exist or has no name
-    const senderName = chat.User && chat.User.name ? chat.User.name : 'Anonymous';
+        // Default sender name if chat.User doesn't exist or has no name
+        const senderName = chat.User && chat.User.name ? chat.User.name : 'Anonymous';
 
-    const messageText = chat.message;
-    const messageTime = formatMessageTime(chat.createdAt);
+        const messageText = chat.message;
+        const messageTime = formatMessageTime(chat.createdAt);
 
-    messageContainer.innerHTML = `
-        <div class="sender-name">${senderName}</div>
-        <div class="message-text">${messageText}</div>
-        <div class="message-time">${messageTime}</div>
-    `;
+        messageContainer.innerHTML = `
+            <div class="sender-name">${senderName}</div>
+            <div class="message-text">${messageText}</div>
+            <div class="message-time">${messageTime}</div>
+        `;
 
-    return messageContainer;
-}
-
-    
+        return messageContainer;
+    }
 
     // Format message time
     function formatMessageTime(createdAt) {
@@ -142,38 +150,36 @@ function createMessageContainer(chat) {
         }
     });
 
-
     // Logout Functionality
-document.getElementById('logoutButton').addEventListener('click', async () => {
-    try {
-        // Assuming you have the user ID and token stored in localStorage
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('token');
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+        try {
+            // Assuming you have the user ID and token stored in localStorage
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('token');
 
-        // Ensure that headers are correctly formatted
-        const config = {
-            headers: {
-                "Authorization": token
+            // Ensure that headers are correctly formatted
+            const config = {
+                headers: {
+                    "Authorization": token
+                }
+            };
+
+            const response = await axios.post('http://13.233.193.120:3000/user/logout', { userId }, config);
+
+            if (response.status === 200) {
+                // Clear localStorage
+                localStorage.clear();
+                // Redirect to login page or any other appropriate page after successful logout
+                window.location.href = '../login/login.html';
+            } else {
+                console.error('Logout failed:', response.data.message);
+                // Handle logout failure
             }
-        };
-
-        const response = await axios.post('http://13.233.193.120:3000/user/logout', { userId }, config);
-
-        if (response.status === 200) {
-            // Clear localStorage
-            localStorage.clear();
-            // Redirect to login page or any other appropriate page after successful logout
-            window.location.href = '../login/login.html';
-        } else {
-            console.error('Logout failed:', response.data.message);
-            // Handle logout failure
+        } catch (error) {
+            console.error('Error during logout:', error.message);
+            // Handle error, show error message to user, etc.
         }
-    } catch (error) {
-        console.error('Error during logout:', error.message);
-        // Handle error, show error message to user, etc.
-    }
-});
-
+    });
 
     // Initial fetch and display of groups
     await fetchAndDisplayGroups();
