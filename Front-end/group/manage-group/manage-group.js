@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const token = localStorage.getItem('token');
 
         // Fetch group details
-        const groupDetailsResponse = await axios.get(`http://13.233.193.120:3000//group/showGroupDetails/${groupId}`, {
+        const groupDetailsResponse = await axios.get(`http://13.233.193.120:3000/group/showGroupDetails/${groupId}`, {
             headers: { "Authorization": token }
         });
         const groupDetails = groupDetailsResponse.data;
@@ -127,7 +127,7 @@ async function setupSearch() {
             const token = localStorage.getItem('token');
 
             // Call the searchUsersByUsername endpoint to get user search results
-            const searchResult = await axios.get(`http://13.233.193.120:3000//group/searchUsersByUsername?searchTerm=${searchTerm}`,  {
+            const searchResult = await axios.get(`http://13.233.193.120:3000/group/searchUsersByUsername?searchTerm=${searchTerm}`,  {
                 headers: { "Authorization": token }
             });
 
@@ -179,7 +179,7 @@ async function addMember(userId) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await axios.post(`http://13.233.193.120:3000//group/${groupId}/add-member`, 
+        const response = await axios.post(`http://13.233.193.120:3000/group/${groupId}/add-member`, 
         { user_id: userId },  // Pass user_id in the body
         {
             headers: { "Authorization": token }
@@ -188,7 +188,7 @@ async function addMember(userId) {
         window.location.reload()
         // Refresh search results after adding member
         const searchTerm = document.getElementById('search-box').value.toLowerCase();
-        const searchResult = await axios.get(`http://13.233.193.120:3000//group/searchUsersByUsername?searchTerm=${searchTerm}`, {
+        const searchResult = await axios.get(`http://13.233.193.120:3000/group/searchUsersByUsername?searchTerm=${searchTerm}`, {
             headers: { "Authorization": token }
         });
         displaySearchResults(searchResult.data);
@@ -202,12 +202,12 @@ async function removeMember(memberId) {
 
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.delete(`http://13.233.193.120:3000//group/${groupId}/remove-member/${memberId}`, {
+        const response = await axios.delete(`http://13.233.193.120:3000/group/${groupId}/remove-member/${memberId}`, {
             headers: { "Authorization": token }
         });
         console.log("Response from server:", response.data);
         // Refresh group details after removing member
-        const groupDetailsResponse = await axios.get(`http://13.233.193.120:3000//group/showGroupDetails/${groupId}`, {
+        const groupDetailsResponse = await axios.get(`http://13.233.193.120:3000/group/showGroupDetails/${groupId}`, {
             headers: { "Authorization": token }
         });
         const groupDetails = groupDetailsResponse.data;
@@ -241,7 +241,7 @@ async function makeAdmin(memberId) {
     const groupId = new URLSearchParams(window.location.search).get('groupId');
     const token = localStorage.getItem('token');
     try {
-        await axios.put(`http://13.233.193.120:3000//group/${groupId}/make-admin`, 
+        await axios.put(`http://13.233.193.120:3000/group/${groupId}/make-admin`, 
         { user_id: memberId }, // Pass user_id in the body
         {
             headers: { "Authorization": token }
@@ -249,7 +249,7 @@ async function makeAdmin(memberId) {
         
         alert(`${memberId} is now admin`);
         // Refresh group details after making admin
-        const groupDetailsResponse = await axios.get(`http://13.233.193.120:3000//group/showGroupDetails/${groupId}`, {
+        const groupDetailsResponse = await axios.get(`http://13.233.193.120:3000/group/showGroupDetails/${groupId}`, {
             headers: { "Authorization": token }
         });
         const groupDetails = groupDetailsResponse.data;

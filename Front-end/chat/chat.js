@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function fetchAndDisplayGroups() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://13.233.193.120:3000//group/getallgroups', { headers: { "Authorization": token } });
+            const response = await axios.get('http://13.233.193.120:3000/group/getallgroups', { headers: { "Authorization": token } });
             displayGroups(response.data.groupNames, response.data.groupIds);
         } catch (error) {
             handleFetchError('groups', error);
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function fetchAndDisplayGroupChats(groupId) {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://13.233.193.120:3000//chat/getallchatsofgroup/${groupId}`, { headers: { "Authorization": token } });
+            const response = await axios.get(`http://13.233.193.120:3000/chat/getallchatsofgroup/${groupId}`, { headers: { "Authorization": token } });
             if (response.status === 200) {
                 displayChats(response.data.chats);
             } else {
@@ -114,7 +114,7 @@ function createMessageContainer(chat) {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                `http://13.233.193.120:3000//chat/createmessage/${groupId}/${userId}`,
+                `http://13.233.193.120:3000/chat/createmessage/${groupId}/${userId}`,
                 { message },
                 { headers: { "Authorization": token } }
             );
@@ -157,7 +157,7 @@ document.getElementById('logoutButton').addEventListener('click', async () => {
             }
         };
 
-        const response = await axios.post('http://13.233.193.120:3000//user/logout', { userId }, config);
+        const response = await axios.post('http://13.233.193.120:3000/user/logout', { userId }, config);
 
         if (response.status === 200) {
             // Clear localStorage
