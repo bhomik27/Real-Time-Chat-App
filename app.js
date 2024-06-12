@@ -15,7 +15,7 @@ const groupRoutes = require('./Backend/routes/group');
 const User = require('./Backend/models/users');
 const Chat = require('./Backend/models/chats');
 const Group = require('./Backend/models/groups');
-const userGroups = require('./Backend/models/usergroups');
+const userGroup = require('./Backend/models/usergroups');
 
 
 const app = express();
@@ -48,13 +48,13 @@ Chat.belongsTo(User);
 Group.hasMany(Chat);
 Chat.belongsTo(Group);
 
-Group.belongsToMany(User, { through: userGroups });
-User.belongsToMany(Group, { through: userGroups });
+Group.belongsToMany(User, { through: userGroup });
+User.belongsToMany(Group, { through: userGroup });
 
 
 
 // Sync Sequelize with the database
-sequelize.sync({force: true})
+sequelize.sync()
     .then(() => {
         app.listen(3000, () => {
             console.log('Server is running on port 3000');

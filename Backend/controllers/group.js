@@ -3,26 +3,26 @@ const UserGroup = require('../models/usergroups');
 const User = require('../models/users');
 const { Op } = require('sequelize');
 
-// const createGroup = async (req, res) => {
-//     try {
-//         const adminIds = [req.user.id]; // Include the creator's ID in the adminIds array
-//         const group = await Group.create({
-//             groupName: req.body.group_name,
-//             groupDescription: req.body.group_description,
-//             adminIds: adminIds // Assign the adminIds when creating the group
-//         });
+const createGroup = async (req, res) => {
+    try {
+        const adminIds = [req.user.id]; // Include the creator's ID in the adminIds array
+        const group = await Group.create({
+            groupName: req.body.group_name,
+            groupDescription: req.body.group_description,
+            adminIds: adminIds // Assign the adminIds when creating the group
+        });
 
-//         const users = req.body.users;
-//         for (let user of users) {
-//             await UserGroup.create({ groupId: group.id, userId: user });
-//         }
+        const users = req.body.users;
+        for (let user of users) {
+            await UserGroup.create({ groupId: group.id, userId: user });
+        }
 
-//         res.status(200).json({ message: "Successfully created group" });
-//     } catch (error) {
-//         console.error("Error creating group:", error);
-//         res.status(500).json({ message: "Failed to create group" });
-//     }
-// };
+        res.status(200).json({ message: "Successfully created group" });
+    } catch (error) {
+        console.error("Error creating group:", error);
+        res.status(500).json({ message: "Failed to create group" });
+    }
+};
 // const createGroup = async (req, res) => {
 //     try {
 //         const adminIds = [req.user.id]; // Include the creator's ID in the adminIds array
@@ -51,25 +51,25 @@ const { Op } = require('sequelize');
 //     }
 // };
 
-const createGroup = async (req, res) => {
-    const { groupName, groupDescription, adminId, members } = req.body;
-    try {
-        const group = await Group.create({
-            groupName,
-            groupDescription,
-            adminId,
-        });
+// const createGroup = async (req, res) => {
+//     const { groupName, groupDescription, adminId, members } = req.body;
+//     try {
+//         const group = await Group.create({
+//             groupName,
+//             groupDescription,
+//             adminId,
+//         });
 
-        if (members && members.length > 0) {
-            await group.addUsers(members);
-        }
+//         if (members && members.length > 0) {
+//             await group.addUsers(members);
+//         }
 
-        res.status(201).json({ message: 'Group created successfully', group });
-    } catch (error) {
-        console.error('Error creating group:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-};
+//         res.status(201).json({ message: 'Group created successfully', group });
+//     } catch (error) {
+//         console.error('Error creating group:', error);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// };
 
 
 
