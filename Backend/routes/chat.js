@@ -13,3 +13,4 @@ router.get('/getallchatsofgroup/:groupId', chatController.getAllChatsOfGroup);
 
 
 module.exports = router;
+

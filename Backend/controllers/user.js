@@ -44,6 +44,33 @@ const signup = async (req, res) => {
     }
 };
 
+// const login = async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
+
+//         const user = await User.findOne({ where: { email } });
+//         if (!user) {
+//             return res.status(401).json({ message: 'Invalid email or password.' });
+//         }
+
+//         const isPasswordValid = await bcrypt.compare(password, user.password);
+//         if (!isPasswordValid) {
+//             return res.status(401).json({ message: 'Invalid email or password.' });
+//         }
+
+//         await User.update({isloggedin:true},{where:{id:user.id}})
+
+//         return res.status(200).json({
+//             message: 'Login successful!',
+//             token: generateAccessToken(user.id, user.name),
+//             userId: user.id,
+//         });
+//     } catch (error) {
+//         console.error('Error during login:', error);
+//         return res.status(500).json({ message: 'Error during login process. Please try again later.' });
+//     }
+// };
+
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -58,18 +85,23 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
-        await User.update({isloggedin:true},{where:{id:user.id}})
+        await User.update({ isloggedin: true }, { where: { id: user.id } });
 
         return res.status(200).json({
             message: 'Login successful!',
             token: generateAccessToken(user.id, user.name),
             userId: user.id,
+            name: user.name, // Add the user's name to the response
         });
     } catch (error) {
         console.error('Error during login:', error);
         return res.status(500).json({ message: 'Error during login process. Please try again later.' });
     }
 };
+
+
+
+
 
 const getAllLoggedinUsers = async (req, res) => {
     try {

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://13.233.193.120:3000/group/getallgroups', { headers: { "Authorization": token } });
+            const response = await axios.get('http://localhost:3000/group/getallgroups', { headers: { "Authorization": token } });
             
             // Ensure response.data.groups exists and is an array
             if (response.data && Array.isArray(response.data.groups)) {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://13.233.193.120:3000/user/getAllLoggedinUsers', { headers: { "Authorization": token } });
+            const response = await axios.get('http://localhost:3000/user/getAllLoggedinUsers', { headers: { "Authorization": token } });
 
             if (response.data && Array.isArray(response.data.loggedinusers)) {
                 const onlineUsers = response.data.loggedinusers;
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             };
 
-            const response = await axios.post('http://13.233.193.120:3000/user/logout', { userId }, config);
+            const response = await axios.post('http://localhost:3000/user/logout', { userId }, config);
 
             if (response.status === 200) {
                 // Clear localStorage
