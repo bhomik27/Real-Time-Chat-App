@@ -191,14 +191,14 @@
 // });
 
 
-
-
 document.addEventListener('DOMContentLoaded', async function () {
     const groupContainer = document.querySelector('.group-container');
     const chatMessages = document.querySelector('.chat-messages');
     const chatHeader = document.querySelector('.chat-header');
     const messageInput = document.querySelector('#message-input');
     const sendButton = document.querySelector('#send-button');
+    const fileInput = document.querySelector('#file-input');
+    const sendFileButton = document.querySelector('#send-file-button');
     const logoutButton = document.getElementById('logoutButton');
 
     let selectedGroupId = null;
@@ -209,13 +209,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get('http://localhost:3000/group/getallgroups', { headers: { "Authorization": token } });
-            console.log(response);
 
             if (response.data && response.data.groups) {
                 const groups = response.data.groups;
-                const groupNames = groups.map(group => group.name);
-                const groupIds = groups.map(group => ({ groupId: group.id }));
-                displayGroups(groupNames, groupIds);
+                displayGroups(groups);
             } else {
                 throw new Error("Invalid response structure");
             }
@@ -224,11 +221,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    function displayGroups(groupNames, groupIds) {
+    function displayGroups(groups) {
         groupContainer.innerHTML = ''; 
-        groupNames.forEach((groupName, index) => {
-            const groupId = groupIds[index].groupId;
-            const groupDiv = createGroupDiv(groupId, groupName);
+        groups.forEach(group => {
+            const groupDiv = createGroupDiv(group.id, group.name);
             groupContainer.appendChild(groupDiv);
         });
     }
@@ -253,6 +249,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         selectedGroupId = groupId;
         chatHeader.textContent = groupName;
         await fetchAndDisplayGroupChats(groupId);
+        await fetchAndDisplayGroupFiles(groupId);
 
         socket.emit('joinGroup', groupId);
     }
@@ -287,9 +284,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const messageContainer = document.createElement('div');
         messageContainer.classList.add('message-container');
 
-        console.log(chat);
-
-        const senderName =localStorage.getItem('name');
+        const senderName = localStorage.getItem('name');
         const messageText = chat.message;
         const messageTime = formatMessageTime(chat.createdAt);
 
@@ -319,15 +314,80 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
-    
+    sendFileButton.addEventListener('click', async function (event) {
+        event.preventDefault();
+        if (fileInput.files.length > 0 && selectedGroupId) {
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('groupId', selectedGroupId);
 
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.post('http://localhost:3000/file/createfile', formData, {
+                    headers: {
+                        "Authorization": token,
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+                if (response.status === 200) {
+                    socket.emit('sendFile', { groupId: selectedGroupId, file: response.data.file });
+                } else {
+                    console.error('Error uploading file:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+        } else {
+            console.error('No file selected or no group selected');
+        }
+    });
 
+    async function fetchAndDisplayGroupFiles(groupId) {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:3000/file/getallfiles/${groupId}`, { headers: { "Authorization": token } });
+            if (response.status === 200) {
+                displayFiles(response.data.files);
+            } else {
+                console.error('Error fetching group files:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching group files:', error);
+        }
+    }
 
+    function displayFiles(files) {
+        files.forEach(file => {
+            const fileContainer = createFileContainer(file);
+            chatMessages.appendChild(fileContainer);
+        });
+    }
+
+    function createFileContainer(file) {
+        const fileContainer = document.createElement('div');
+        fileContainer.classList.add('file-container');
+
+        const fileLink = document.createElement('a');
+        fileLink.href = file.url;
+        fileLink.textContent = 'Download File';
+        fileLink.target = 'file.url';
+
+        fileContainer.appendChild(fileLink);
+        return fileContainer;
+    }
 
     socket.on('newMessage', (chat) => {
         if (chat.groupId === selectedGroupId) {
             const messageContainer = createMessageContainer(chat);
             chatMessages.appendChild(messageContainer);
+        }
+    });
+
+    socket.on('newFile', (file) => {
+        if (file.groupId === selectedGroupId) {
+            const fileContainer = createFileContainer(file);
+            chatMessages.appendChild(fileContainer);
         }
     });
 

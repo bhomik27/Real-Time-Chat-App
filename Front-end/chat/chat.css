@@ -335,3 +335,32 @@ body {
     align-self: flex-start;
     background-color: #e5e5ea; /* Receiver's color */
 }
+
+
+.file-container{
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 9px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    color: #1f1f1f;
+    font-size: 16px;
+    text-decoration: none;
+    margin: 10px 10px 10px 10px;
+    padding: 10px;
+    width: 20%;
+}
+
+#file-input{
+    margin-left: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+
+
+
