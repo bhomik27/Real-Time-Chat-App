@@ -64,8 +64,8 @@
 //         console.error('Unable to connect to the database:', err);
 //     });
 
-
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
@@ -74,15 +74,20 @@ const { Server } = require('socket.io');
 require('dotenv').config();
 const sequelize = require('./Backend/util/database');
 
+const file = require('express-fileupload');
+app.use(file());
+
 const userRoutes = require('./Backend/routes/user');
 const chatRoutes = require('./Backend/routes/chat');
 const groupRoutes = require('./Backend/routes/group');
+const fileRoutes = require('./Backend/routes/files');
+
 const User = require('./Backend/models/users');
 const Chat = require('./Backend/models/chats');
 const Group = require('./Backend/models/groups');
 const UserGroup = require('./Backend/models/usergroups');
+const File = require('./Backend/models/files');
 
-const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -110,12 +115,19 @@ app.use(express.static(path.join(__dirname, 'Front-end')));
 app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
 app.use('/group', groupRoutes);
+app.use('/file', fileRoutes);
 
 User.hasMany(Chat);
 Chat.belongsTo(User);
 
 Group.hasMany(Chat);
 Chat.belongsTo(Group);
+
+User.hasMany(File);
+File.belongsTo(User);
+
+Group.hasMany(File);
+File.belongsTo(Group);
 
 Group.belongsToMany(User, { through: UserGroup });
 User.belongsToMany(Group, { through: UserGroup });
@@ -150,6 +162,10 @@ io.on('connection', (socket) => {
         } catch (error) {
             console.error('Error creating chat:', error);
         }
+    });
+
+    socket.on('sendFile', (file) => {
+        io.to(file.groupId).emit('newFile', file);
     });
 
     socket.on('disconnect', () => {
