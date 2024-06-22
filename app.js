@@ -65,29 +65,19 @@
 //     });
 
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
-require('dotenv').config();
+const cron = require('node-cron');
 const sequelize = require('./Backend/util/database');
-
 const file = require('express-fileupload');
-app.use(file());
+require('dotenv').config();
+const { Op } = require('sequelize');
 
-const userRoutes = require('./Backend/routes/user');
-const chatRoutes = require('./Backend/routes/chat');
-const groupRoutes = require('./Backend/routes/group');
-const fileRoutes = require('./Backend/routes/files');
 
-const User = require('./Backend/models/users');
-const Chat = require('./Backend/models/chats');
-const Group = require('./Backend/models/groups');
-const UserGroup = require('./Backend/models/usergroups');
-const File = require('./Backend/models/files');
-
+const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -97,6 +87,22 @@ const io = new Server(server, {
     },
 });
 
+// Models
+const User = require('./Backend/models/users');
+const Chat = require('./Backend/models/chats');
+const Group = require('./Backend/models/groups');
+const UserGroup = require('./Backend/models/usergroups');
+const File = require('./Backend/models/files');
+const ArchivedChat = require('./Backend/models/archivedChats');
+
+// Routes
+const userRoutes = require('./Backend/routes/user');
+const chatRoutes = require('./Backend/routes/chat');
+const groupRoutes = require('./Backend/routes/group');
+const fileRoutes = require('./Backend/routes/files');
+
+// Middleware
+app.use(file());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -105,7 +111,6 @@ const corsOptions = {
     methods: ['GET', 'POST'],
     credentials: true
 };
-
 app.use(cors(corsOptions));
 
 // Serve static files from the Front-end directory
@@ -117,6 +122,7 @@ app.use('/chat', chatRoutes);
 app.use('/group', groupRoutes);
 app.use('/file', fileRoutes);
 
+// Sequelize associations
 User.hasMany(Chat);
 Chat.belongsTo(User);
 
@@ -132,6 +138,7 @@ File.belongsTo(Group);
 Group.belongsToMany(User, { through: UserGroup });
 User.belongsToMany(Group, { through: UserGroup });
 
+// Synchronize Sequelize models and start server
 sequelize.sync()
     .then(() => {
         server.listen(3000, () => {
@@ -142,6 +149,7 @@ sequelize.sync()
         console.error('Unable to connect to the database:', err);
     });
 
+// Socket.io events
 io.on('connection', (socket) => {
     console.log('New client connected');
 
@@ -171,4 +179,54 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
+});
+
+// Function to archive old messages
+const archiveOldMessages = async () => {
+    try {
+        const oneDayAgo = new Date();
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+        // Find all messages older than one day
+        const oldMessages = await Chat.findAll({
+            where: {
+                createdAt: {
+                    [Op.lt]: oneDayAgo
+                }
+            }
+        });
+
+        // Move messages to ArchivedChat table
+        const archivedMessages = oldMessages.map(message => message.toJSON());
+        await ArchivedChat.bulkCreate(archivedMessages);
+
+        // Delete old messages from Chat table
+        await Chat.destroy({
+            where: {
+                createdAt: {
+                    [Op.lt]: oneDayAgo
+                }
+            }
+        });
+
+        console.log('Old messages archived and deleted successfully');
+    } catch (error) {
+        console.error('Error archiving old messages:', error);
+    }
+};
+
+
+// Endpoint to manually trigger archiving
+app.get('/archive-messages', async (req, res) => {
+    try {
+        await archiveOldMessages();
+        res.status(200).send('Old messages archived successfully');
+    } catch (error) {
+        res.status(500).send('Error archiving old messages');
+    }
+});
+
+// Cron job to archive old messages
+cron.schedule('0 2 * * *', async () => {
+    await archiveOldMessages();
 });
